@@ -1,6 +1,6 @@
 import datetime
 
-NAME = L('Title')
+NAME = 'ESPN 3'
 ART = 'art-default.jpg'
 ICON = 'icon-default.png'
 
@@ -11,8 +11,7 @@ ESPN_PLAYER = "http://espn.go.com/watchespn/player/_/source/espn3/id/"
 ####################################################################################################
 def Start():
 
-	Plugin.AddPrefixHandler("/video/espn3", VideoMainMenu, L('VideoTitle'), ICON, ART)
-
+	Plugin.AddPrefixHandler("/video/espn3", VideoMainMenu, NAME, ICON, ART)
 	Plugin.AddViewGroup("InfoList", viewMode="InfoList", mediaType="items")
 	Plugin.AddViewGroup("List", viewMode="List", mediaType="items")
 
@@ -24,29 +23,29 @@ def Start():
 def VideoMainMenu():
 
 	dir = MediaContainer(viewGroup="List")
-	dir.Append(Function(DirectoryItem(VideoPage, "Live Games"), pageUrl = ESPN3_LIVE, predict="/event/event"))
-	dir.Append(Function(DirectoryItem(VideoPage, "All Replay Games"), pageUrl = ESPN3_REPLAY, predict="/event/event"))
-	dir.Append(Function(DirectoryItem(VideoPage, "Soccer"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='SO']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Football"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='FB']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Baseball"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='BB']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Basketball"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='BK']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Tennis"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='TN']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Hockey"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='HO']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Softball"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='SB']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Cricket"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='CR']/.."))
-	dir.Append(Function(DirectoryItem(VideoPage, "Rugby"), pageUrl = ESPN3_REPLAY, predict="/event/event/sport[@code='RG']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Live Games"), url = ESPN3_LIVE, predict="/event/event"))
+	dir.Append(Function(DirectoryItem(VideoPage, "All Replay Games"), url = ESPN3_REPLAY, predict="/event/event"))
+	dir.Append(Function(DirectoryItem(VideoPage, "Soccer"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='SO']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Football"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='FB']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Baseball"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='BB']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Basketball"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='BK']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Tennis"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='TN']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Hockey"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='HO']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Softball"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='SB']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Cricket"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='CR']/.."))
+	dir.Append(Function(DirectoryItem(VideoPage, "Rugby"), url = ESPN3_REPLAY, predict="/event/event/sport[@code='RG']/.."))
 
 	return dir
 
 ####################################################################################################
-def VideoPage(sender, pageUrl, predict):
+def VideoPage(sender, url, predict):
 
-	if "live" in pageUrl:
+	if "live" in url:
 		dir = MediaContainer(title2=sender.itemTitle, viewGroup="List", noCache=True)
 	else:
 		dir = MediaContainer(title2=sender.itemTitle, viewGroup="InfoList", noCache=True)
 
-	content = XML.ElementFromURL(pageUrl, cacheTime=300).xpath(predict)
+	content = XML.ElementFromURL(url, cacheTime=300).xpath(predict)
 	eventMap = dict()
 
 	for item in content:
